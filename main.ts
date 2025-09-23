@@ -111,6 +111,77 @@ namespace DUELink {
 
         return _str_response
     }
+
+
+    /**
+     * To be continue
+     */
+    //% blockHidden=1
+    export function WriteFloat(array_name: string, data: number []): number {
+        const count = data.length
+        const cmd = `strmwr(${array_name},${count})`;
+
+        WriteCommand(cmd)
+
+        _value_response = -1
+        _str_response = ""
+        let timeout = _timeout
+
+        while (_value_response != 38 && timeout > 0) { // 38 is &
+            _value_response = pins.i2cReadNumber(0x52, NumberFormat.UInt8LE, false)
+            pause(1)
+            timeout--
+        }
+
+        if (timeout == 0)
+            return -1
+
+        for (let i = 0; i < data.length; i++) {
+            let buffer = control.createBuffer(4);
+            buffer.setNumber(NumberFormat.Float32LE, 0, data[i]);
+
+            WriteRawData([buffer[0], buffer[1], buffer[2], buffer[3]]);
+        }
+
+        ReadResponse()
+        return count
+
+    }
+
+    /**
+     * To be continue
+     */
+    //% blockHidden=1
+    function WriteRawData(data: number[]): number {
+        let buf = pins.createBuffer(1)
+        for (let i = 0; i < data.length; i++) {
+            let byte = Math.floor(data[i]) & 0xFF;
+            buf[0] = byte
+            pins.i2cWriteBuffer(0x52, buf)
+        }
+
+        return data.length
+    }
+
+    /**
+     * To be continue
+     */
+    //% blockHidden=1
+    function WriteCommand(text: string): void {
+        if (!_doSync) {
+            _str_response = ""
+            _value_response = -1
+            _timeout = 1000
+            Sync() // sync first Execute
+            _doSync = true
+        }
+
+        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(text), false);
+        let buf2 = pins.createBuffer(1)
+        buf2[0] = 10
+        pins.i2cWriteBuffer(0x52, buf2)        
+    }
+    
     //% blockHidden=1
     function Sync() {
         _value_response = -1
