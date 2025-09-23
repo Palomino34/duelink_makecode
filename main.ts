@@ -6,11 +6,13 @@ namespace DUELink {
     let _doSync: boolean
 
     //% block="Set response timeout to %timeout milliseconds"
-    export function SetTimeout(timeout: number = 1000) {
+    //% timeout.defl=1000
+    export function SetTimeout(timeout: number) {
         _timeout = timeout
     }
     //% block="Execute command %text return number"
-    export function ExecuteCommand(str: string = "dread(1,2)"): number {
+    //% text.defl="dread(1,2)"
+    export function ExecuteCommand(text: string ): number {
         if (!_doSync) {
             _str_response = ""
             _value_response = -1
@@ -19,7 +21,7 @@ namespace DUELink {
             _doSync = true
         }
                
-        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(str), false);
+        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(text), false);
         let buf = pins.createBuffer(1)
         buf[0] = 10
         pins.i2cWriteBuffer(0x52, buf)  
@@ -45,7 +47,8 @@ namespace DUELink {
     }
 
     //% block="Execute command %text return raw string"
-    export function ExecuteCommandRaw(str: string = "version()"): string {
+    //% text.defl="version()"
+    export function ExecuteCommandRaw(text: string): string {
         if (!_doSync) {
             _str_response = ""
             _value_response = -1
@@ -54,7 +57,7 @@ namespace DUELink {
             _doSync = true
         }
 
-        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(str), false);
+        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(text), false);
         let buf2 = pins.createBuffer(1)
         buf2[0] = 10
         pins.i2cWriteBuffer(0x52, buf2)
@@ -62,7 +65,8 @@ namespace DUELink {
     }
 
     //% block="Execute command %text"
-    export function ExecuteCommandNoReturn(str: string = "statled(100,100,10)"): void {
+    //% text.defl="statled(100,100,10)"
+    export function ExecuteCommandNoReturn(text: string): void {
         if (!_doSync) {
             _str_response = ""
             _value_response = -1
@@ -71,7 +75,7 @@ namespace DUELink {
             _doSync = true
         }
 
-        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(str), false);
+        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(text), false);
         let buf2 = pins.createBuffer(1)
         buf2[0] = 10
         pins.i2cWriteBuffer(0x52, buf2)
