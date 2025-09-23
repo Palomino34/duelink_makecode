@@ -46,7 +46,7 @@ namespace DUELink {
         }
     }
 
-    //% block="Execute command %text return raw string"
+    //% block="Execute command %text return string"
     //% text.defl="version()"
     export function ExecuteCommandRaw(text: string): string {
         if (!_doSync) {
@@ -112,12 +112,64 @@ namespace DUELink {
         return _str_response
     }
 
+    //% block="Write bytes $data to $array_name"
+    //% array_name.defl="b1"
+    //% data.defl=[1, 2, 3]
+    export function WriteBytes(array_name: string, data: number[]): number {
+        const count = data.length
+        const cmd = `strmwr(${array_name},${count})`;
 
-    /**
-     * To be continue
-     */
-    //% blockHidden=1
-    export function WriteFloat(array_name: string, data: number []): number {
+        WriteCommand(cmd)
+
+        _value_response = -1
+        _str_response = ""
+        let timeout = _timeout
+
+        while (_value_response != 38 && timeout > 0) { // 38 is &
+            _value_response = pins.i2cReadNumber(0x52, NumberFormat.UInt8LE, false)
+            pause(1)
+            timeout--
+        }
+
+        if (timeout == 0)
+            return -1
+
+        WriteRawData(data)        
+        ReadResponse()
+        return count
+    }
+
+    //% block="Read bytes $data to $array_name"
+    //% array_name.defl="b1"
+    //% data.defl=[0]
+    export function ReadBytes(array_name: string, data: number[]): number {
+        const count = data.length
+        const cmd = `strmrd(${array_name},${count})`;
+
+        WriteCommand(cmd)
+
+        _value_response = -1
+        _str_response = ""
+        let timeout = _timeout
+
+        while (_value_response != 38 && timeout > 0) { // 38 is &
+            _value_response = pins.i2cReadNumber(0x52, NumberFormat.UInt8LE, false)
+            pause(1)
+            timeout--
+        }
+
+        if (timeout == 0)
+            return -1
+
+        ReadRawData(data, 0, count)
+        ReadResponse()
+        return count
+    }
+
+    //% block="Write float $data to $array_name"
+    //% array_name.defl="a1"
+    //% data.defl=[1.0, 1.0, 2.0]
+    export function WriteFloats(array_name: string, data: number []): number {
         const count = data.length
         const cmd = `strmwr(${array_name},${count})`;
 
@@ -145,8 +197,9 @@ namespace DUELink {
 
         ReadResponse()
         return count
-
     }
+
+    
 
     /**
      * To be continue
@@ -161,6 +214,23 @@ namespace DUELink {
         }
 
         return data.length
+    }
+
+    /**
+     * To be continue
+     */
+    //% blockHidden=1
+    function ReadRawData(data: number[], offset: number, count: number): number {
+        let timeout = _timeout;
+        let i = 0;
+
+        while (i < count) {
+            data[offset + i] = pins.i2cReadNumber(0x52, NumberFormat.UInt8LE, false)
+            i = i + 1            
+            pause(1)
+        }
+
+        return count
     }
 
     /**
