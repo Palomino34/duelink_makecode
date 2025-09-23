@@ -9,7 +9,7 @@ namespace DUELink {
     export function SetTimeout(timeout: number) {
         _timeout = timeout
     }
-    //% block="Execute command %text"
+    //% block="Execute command %text return number"
     export function ExecuteCommand(str: string): number {
         if (!_doSync) {
             _str_response = ""
@@ -44,7 +44,7 @@ namespace DUELink {
         }
     }
 
-    //% block="Execute command raw %text"
+    //% block="Execute command %text return raw string"
     export function ExecuteCommandRaw(str: string): string {
         if (!_doSync) {
             _str_response = ""
@@ -59,6 +59,23 @@ namespace DUELink {
         buf2[0] = 10
         pins.i2cWriteBuffer(0x52, buf2)
         return ReadResponse()
+    }
+
+    //% block="Execute command %text"
+    export function ExecuteCommandNoReturn(str: string): void {
+        if (!_doSync) {
+            _str_response = ""
+            _value_response = -1
+            _timeout = 1000
+            Sync() // sync first Execute
+            _doSync = true
+        }
+
+        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(str), false);
+        let buf2 = pins.createBuffer(1)
+        buf2[0] = 10
+        pins.i2cWriteBuffer(0x52, buf2)
+        ReadResponse()
     }
 
     //% block="Read reponse"
