@@ -112,9 +112,11 @@ namespace DUELink {
         return _str_response
     }
 
+    
     //% block="Write bytes $data to $array_name"
     //% array_name.defl="b1"
     //% data.defl=[1, 2, 3]
+    //% blockHidden=1
     export function WriteBytes(array_name: string, data: number[]): number {
         const count = data.length
         const cmd = `strmwr(${array_name},${count})`;
@@ -139,6 +141,7 @@ namespace DUELink {
         return count
     }
 
+    //% blockHidden=1
     //% block="Read bytes $data to $array_name"
     //% array_name.defl="b1"
     //% data.defl=[0]
@@ -166,6 +169,7 @@ namespace DUELink {
         return count
     }
 
+    //% blockHidden=1
     //% block="Write float $data to $array_name"
     //% array_name.defl="a1"
     //% data.defl=[1.0, 1.0, 2.0]
