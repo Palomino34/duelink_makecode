@@ -2,10 +2,6 @@
 > Open this page at [https://palomino34.github.io/duelink/](https://palomino34.github.io/duelink/)
 
 
-## Logo
-!logo
-
-
 ## Use as Extension
 
 This repository can be added as an **extension** in MakeCode.

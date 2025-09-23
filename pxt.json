@@ -2,7 +2,6 @@
     "name": "DUELink",
     "version": "1.0.2",
     "description": "",
-    "icon": "icon.png",
     "dependencies": {
         "core": "*",
         "radio": "*",
@@ -24,5 +23,6 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "tsprj",
+    "icon": "icon.png"
 }
