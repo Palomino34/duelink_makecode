@@ -1,5 +1,5 @@
 
-> Open this page at [https://palomino34.github.io/duelink/](https://palomino34.github.io/duelink/)
+> Open this page at [https://ghi-electronics.github.io/duelink_makecode/](https://ghi-electronics.github.io/duelink_makecode/)
 
 
 ## Use as Extension
@@ -9,7 +9,7 @@ This repository can be added as an **extension** in MakeCode.
 * open [https://makecode.microbit.org/](https://makecode.microbit.org/)
 * click on **New Project**
 * click on **Extensions** under the gearwheel menu
-* search for **https://github.com/palomino34/duelink** and import
+* search for **https://github.com/ghi-electronics/duelink_makecode** and import
 
 ## Edit this project
 
@@ -17,7 +17,7 @@ To edit this repository in MakeCode.
 
 * open [https://makecode.microbit.org/](https://makecode.microbit.org/)
 * click on **Import** then click on **Import URL**
-* paste **https://github.com/palomino34/duelink** and click import
+* paste **https://github.com/ghi-electronics/duelink_makecode** and click import
 
 #### Metadata (used for search, rendering)
 
