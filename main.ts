@@ -1,4 +1,5 @@
-namespace duelink {
+//% color="#31C7D5" weight=10 icon="\uF44D"
+namespace DUELink {
     let _str_response: string
     let _value_response: number
     let _timeout: number
@@ -21,12 +22,47 @@ namespace duelink {
         pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(str), false);
         let buf = pins.createBuffer(1)
         buf[0] = 10
-        pins.i2cWriteBuffer(0x52, buf)        
+        pins.i2cWriteBuffer(0x52, buf)  
+
+        let reponse = ReadResponse()
+
+        if (reponse.trim() === "")
+            return -1
+
+        try {
+            const ret = parseFloat(reponse);
+
+            if (isNaN(ret)) {
+
+                return -1;
+            }
+
+            return ret;
+        }
+        catch {
+            return -1
+        }
+    }
+
+    //% block="Execute command raw %text"
+    export function ExecuteCommandRaw(str: string): string {
+        if (!_doSync) {
+            _str_response = ""
+            _value_response = -1
+            _timeout = 1000
+            Sync() // sync first Execute
+            _doSync = true
+        }
+
+        pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(str), false);
+        let buf2 = pins.createBuffer(1)
+        buf2[0] = 10
+        pins.i2cWriteBuffer(0x52, buf2)
         return ReadResponse()
     }
 
     //% block="Read reponse"
-    export function ReadResponse(): number {
+    export function ReadResponse(): string {
         _value_response = -1
         _str_response = ""
         let timeout = _timeout
@@ -52,29 +88,7 @@ namespace duelink {
             pause(1)
         }
 
-        
-        if (_str_response.trim() === "")
-
-            
-            return -1
-
-        try {
-            const ret = parseFloat(_str_response);
-
-            if (isNaN(ret)) {
-                
-                return -1;
-            }
-
-            
-            return ret;
-        } 
-        catch {
-            
-            return -1
-        }
-
-        
+        return _str_response
     }
     //% blockHidden=1
     function Sync() {
@@ -82,18 +96,15 @@ namespace duelink {
         _str_response = ""
         _timeout = 1000
 
-        let buf2 = pins.createBuffer(1)
-        buf2[0] = 27
-        pins.i2cWriteBuffer(0x52, buf2)
+        let buf22 = pins.createBuffer(1)
+        buf22[0] = 27
+        pins.i2cWriteBuffer(0x52, buf22)
         pause(100)
 
-        buf2[0] = 10
-        pins.i2cWriteBuffer(0x52, buf2)
+        buf22[0] = 10
+        pins.i2cWriteBuffer(0x52, buf22)
         pause(10)
         
         ReadResponse()
     }
-
-
-
 }
