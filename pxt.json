@@ -2,6 +2,7 @@
     "name": "DUELink",
     "version": "1.0.0",
     "description": "",
+    "icon": "icon.png",
     "dependencies": {
         "core": "*",
         "radio": "*",
