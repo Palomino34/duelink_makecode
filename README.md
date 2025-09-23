@@ -3,7 +3,7 @@
 
 
 ## Logo
-!Logo
+!logo
 
 
 ## Use as Extension
