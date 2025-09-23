@@ -1,4 +1,4 @@
-//% color="#046307" weight=10 icon="\uF44D"
+//% color="#046307" weight=10 icon="\uf2db"
 namespace DUELink {
     let _str_response: string
     let _value_response: number
