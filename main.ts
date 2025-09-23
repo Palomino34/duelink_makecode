@@ -82,6 +82,7 @@ namespace DUELink {
         ReadResponse()
     }
 
+    //% blockHidden=1
     //% block="Read reponse"
     export function ReadResponse(): string {
         _value_response = -1
