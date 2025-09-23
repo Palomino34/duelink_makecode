@@ -1,7 +1,4 @@
 
-> Open this page at [https://ghi-electronics.github.io/duelink_makecode/](https://ghi-electronics.github.io/duelink_makecode/)
-
-
 ## Use as Extension
 
 This repository can be added as an **extension** in MakeCode.
