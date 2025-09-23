@@ -1,27 +1,27 @@
-namespace DUELink {
+namespace duelink {
     let _str_response: string
     let _value_response: number
     let _timeout: number
-    let _doSync = false
+    let _doSync: boolean
+
     //% block="Set timeout to %timeout"
     export function SetTimeout(timeout: number) {
         _timeout = timeout
     }
     //% block="Execute command %text"
     export function ExecuteCommand(str: string): number {
-        led.plot(1,0)
-        if (_doSync===false){
+        if (!_doSync) {
+            _str_response = ""
+            _value_response = -1
+            _timeout = 1000
             Sync() // sync first Execute
             _doSync = true
         }
-
-        led.plot(2, 0)
-        
+               
         pins.i2cWriteBuffer(0x52, Buffer.fromUTF8(str), false);
         let buf = pins.createBuffer(1)
         buf[0] = 10
-        pins.i2cWriteBuffer(0x52, buf)
-        led.plot(3, 0)
+        pins.i2cWriteBuffer(0x52, buf)        
         return ReadResponse()
     }
 
@@ -30,8 +30,7 @@ namespace DUELink {
         _value_response = -1
         _str_response = ""
         let timeout = _timeout
-
-        led.plot(0, 1)
+      
         while (_value_response != 10 && timeout > 0) {
             _value_response = pins.i2cReadNumber(0x52, NumberFormat.UInt8LE, false)
             //\r is not put added because < 32
@@ -43,8 +42,7 @@ namespace DUELink {
                 timeout--
             }
         }
-        
-        led.plot(1, 1)
+                
         // we only need number like: "123\r\n>". We only need number
         // this will clear > or any garbage then
         pause(2) 
@@ -54,25 +52,25 @@ namespace DUELink {
             pause(1)
         }
 
-        led.plot(2, 1)
+        
         if (_str_response.trim() === "")
 
-            led.plot(3, 1)
+            
             return -1
 
         try {
             const ret = parseFloat(_str_response);
 
             if (isNaN(ret)) {
-                led.plot(4, 1)
+                
                 return -1;
             }
 
-            led.plot(0, 2)
+            
             return ret;
         } 
         catch {
-            led.plot(1, 2)
+            
             return -1
         }
 

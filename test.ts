@@ -1,4 +1,14 @@
 // tests go here; this will not be compiled when this package is used as an extension.
-led.plot(0, 0)
-DUELink.ExecuteCommand("statled(100,100,10)")
-led.plot(0, 4)
+
+while (true) {
+    if (duelink.ExecuteCommand("dread(1,2)")==1)
+        led.plot(2, 2)
+    else 
+        led.unplot(2, 2)
+
+    pause(100)
+
+    
+}
+
+
