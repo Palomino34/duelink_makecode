@@ -14,9 +14,6 @@ namespace DUELink {
     //% text.defl="dread(1,2)"
     export function ExecuteCommand(text: string ): number {
         if (!_doSync) {
-            _str_response = ""
-            _value_response = -1
-            _timeout = 1000
             Sync() // sync first Execute
             _doSync = true
         }
@@ -50,9 +47,6 @@ namespace DUELink {
     //% text.defl="version()"
     export function ExecuteCommandRaw(text: string): string {
         if (!_doSync) {
-            _str_response = ""
-            _value_response = -1
-            _timeout = 1000
             Sync() // sync first Execute
             _doSync = true
         }
@@ -68,9 +62,6 @@ namespace DUELink {
     //% text.defl="statled(100,100,10)"
     export function ExecuteCommandNoReturn(text: string): void {
         if (!_doSync) {
-            _str_response = ""
-            _value_response = -1
-            _timeout = 1000
             Sync() // sync first Execute
             _doSync = true
         }
@@ -82,9 +73,34 @@ namespace DUELink {
         ReadResponse()
     }
 
+    //% block="Set Stat LED to high %high (ms), %low (ms), count %count "
+    //% high.defl="100"
+    //% low.defl="100"
+    //% count.defl="10"
+    export function SetStatLed(high: number, low: number, count:number): void {
+        if (!_doSync) {
+            Sync() // sync first Execute
+            _doSync = true
+        }
+
+        const cmd = `statled(${high},${low},${count})`;
+        ExecuteCommandNoReturn(cmd);
+    }
+
+    //% block="Select device %index "
+    //% index.defl="1"
+    export function Select(index: number): void {
+        if (!_doSync) {
+            Sync() // sync first Execute
+            _doSync = true
+        }        
+
+        const cmd = `sel(${index})`;
+        ExecuteCommandNoReturn(cmd);
+    }
+
     //% blockHidden=1
-    //% block="Read reponse"
-    export function ReadResponse(): string {
+    function ReadResponse(): string {
         _value_response = -1
         _str_response = ""
         let timeout = _timeout
@@ -113,12 +129,8 @@ namespace DUELink {
         return _str_response
     }
 
-    
-    //% block="Write bytes $data to $array_name"
-    //% array_name.defl="b1"
-    //% data.defl=[1, 2, 3]
     //% blockHidden=1
-    export function WriteBytes(array_name: string, data: number[]): number {
+    function WriteBytes(array_name: string, data: number[]): number {
         const count = data.length
         const cmd = `strmwr(${array_name},${count})`;
 
@@ -143,10 +155,7 @@ namespace DUELink {
     }
 
     //% blockHidden=1
-    //% block="Read bytes $data to $array_name"
-    //% array_name.defl="b1"
-    //% data.defl=[0]
-    export function ReadBytes(array_name: string, data: number[]): number {
+    function ReadBytes(array_name: string, data: number[]): number {
         const count = data.length
         const cmd = `strmrd(${array_name},${count})`;
 
@@ -171,9 +180,6 @@ namespace DUELink {
     }
 
     //% blockHidden=1
-    //% block="Write float $data to $array_name"
-    //% array_name.defl="a1"
-    //% data.defl=[1.0, 1.0, 2.0]
     export function WriteFloats(array_name: string, data: number []): number {
         const count = data.length
         const cmd = `strmwr(${array_name},${count})`;
@@ -204,11 +210,6 @@ namespace DUELink {
         return count
     }
 
-    
-
-    /**
-     * To be continue
-     */
     //% blockHidden=1
     function WriteRawData(data: number[]): number {
         let buf = pins.createBuffer(1)
@@ -221,9 +222,6 @@ namespace DUELink {
         return data.length
     }
 
-    /**
-     * To be continue
-     */
     //% blockHidden=1
     function ReadRawData(data: number[], offset: number, count: number): number {
         let timeout = _timeout;
@@ -238,15 +236,9 @@ namespace DUELink {
         return count
     }
 
-    /**
-     * To be continue
-     */
     //% blockHidden=1
     function WriteCommand(text: string): void {
         if (!_doSync) {
-            _str_response = ""
-            _value_response = -1
-            _timeout = 1000
             Sync() // sync first Execute
             _doSync = true
         }
