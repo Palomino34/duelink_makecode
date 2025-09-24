@@ -73,7 +73,7 @@ namespace DUELink {
         ReadResponse()
     }
 
-    //% block="Set Stat LED to high %high (ms), %low (ms), count %count "
+    //% block="Set Stat LED to high %high (ms), low %low (ms), count %count "
     //% high.defl="100"
     //% low.defl="100"
     //% count.defl="10"
